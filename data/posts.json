@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "text": "Microsoft will stop Typescript support in 2020",
+    "imgSrc": "https://regmedia.co.uk/2016/09/23/typescript.jpg?x=442&y=293&crop=1"
+  },
+  {
+    "id": 2,
+    "text": "By 2030, one of every 3 american will work as a software developer",
+    "imgSrc": "https://thumbor.forbes.com/thumbor/960x0/https%3A%2F%2Fspecials-images.forbesimg.com%2Fimageserve%2F743818273%2F960x0.jpg%3Ffit%3Dscale"
+  },
+  {
+    "id": 3,
+    "text": "Mark Zuckerberg: I'm tired of leading facebook and looking for an heir",
+    "imgSrc": "https://cdn.i-scmp.com/sites/default/files/styles/1200x800/public/d8/images/methode/2019/05/30/6ecc5550-8121-11e9-bda2-8286175bc410_image_hires_120640.JPG?itok=prBQnylB&v=1559189215"
+  }
+]
