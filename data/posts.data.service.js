@@ -1,5 +1,7 @@
 const fs = require('fs');
 const path = require('path');
+const promisify = require('../promisify');
+const fsp = promisify(fs);
 
 const postsFile = path.join(__dirname, './posts.json');
 const posts = new Map();
@@ -25,54 +27,56 @@ const getById = (id) => {
 };
 
 // return new post OR undefined
-const add = (data) => {
-  const post = { ...data, id: nextId++ };
+const add = async (data) => {
+  const id = nextId++;
+  const post = { ...data, id };
   posts.set(id, post);
-  if (trySave()) {
-    return post;
-  } else {
-    // rollback
-    posts.delete(id);
-  }
+  return await trySave()
+    .then(() => post)
+    .catch(() => {
+      // rollback
+      posts.delete(id);
+    });
 };
 
 // return true if post found
-const update = (id, data) => {
+const update = async (id, data) => {
   const oldPost = posts.get(id);
   if (oldPost) {
     // add id at the end to ensure that it doesn't get updated
     const newPost = { ...oldPost, ...data, id };
     posts.set(id, newPost);
-    if (trySave()) {
-      return true;
-    } else {
-      // rollback
-      posts.set(id, oldPost);
-    }
+    return await trySave()
+      .then(() => true)
+      .catch(() => {
+        // rollback
+        posts.set(id, oldPost);
+      });
   }
 };
 
 // return true if post found
-const remove = (id) => {
+const remove = async (id) => {
   const post = posts.get(id);
   if (post) {
     posts.delete(id);
-    if (trySave()) {
-      return true;
-    } else {
-      // rollback
-      posts.set(id, post);
-    }
+    return await trySave()
+      .then(() => true)
+      .catch(() => {
+        // rollback
+        posts.set(id, post);
+      });
   }
 };
 
 function trySave() {
-  fs.writeFile(postsFile, JSON.stringify([...posts.values()], null, 2), (err) => {
-    if (err) {
-      console.error(err.message);
-    } else {
-      return true;
-    }
+  return new Promise((resolve, reject) => {
+    fsp.writeFile(postsFile, JSON.stringify([...posts.values()], null, 2))
+      .then(res => resolve(res))
+      .catch(err => {
+        console.error(err.message);
+        reject(err);
+      });
   });
 }
 
