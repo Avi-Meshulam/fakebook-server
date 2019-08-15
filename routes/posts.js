@@ -22,7 +22,7 @@ router
 
   // POST
   .post('/', async function (req, res, next) {
-    const post = await posts.add(req.body);
+    const post = await posts.insert(req.body);
     if (post) {
       res.send(JSON.stringify(post));
     } else {

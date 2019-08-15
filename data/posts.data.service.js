@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const promisify = require('../promisify');
+
 const fsp = promisify(fs);
 
 const postsFile = path.join(__dirname, './posts.json');
@@ -27,7 +28,7 @@ const getById = (id) => {
 };
 
 // return new post OR undefined
-const add = async (data) => {
+const insert = async (data) => {
   const id = nextId++;
   const post = { ...data, id };
   posts.set(id, post);
@@ -83,7 +84,7 @@ function trySave() {
 module.exports = {
   getAll,
   getById,
-  add,
+  insert,
   update,
   remove
 };
