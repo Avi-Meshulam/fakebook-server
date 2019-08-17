@@ -1,11 +1,14 @@
-const express = require('express');
-const path = require('path');
 const cookieParser = require('cookie-parser');
-const logger = require('morgan');
 const cors = require('cors');
-
+const express = require('express');
+const logger = require('morgan');
+const path = require('path');
+const FileDBService = require('./services/data.fileDB.service');
 const indexRouter = require('./routes/index');
-const postsRouter = require('./routes/posts');
+const dataRouter = require('./services/router.data.service');
+
+const postsDataService = new FileDBService('posts', 'id', ['text', 'image']);
+const postsRouter = dataRouter(postsDataService);
 
 const app = express();
 
@@ -20,6 +23,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api/posts', postsRouter);
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.use((req, res, next) => {
   let err = new Error('Page Not Found');
