@@ -7,7 +7,7 @@ const FileDBService = require('./services/data.fileDB.service');
 const indexRouter = require('./routes/index');
 const dataRouter = require('./services/router.data.service');
 
-const postsDataService = new FileDBService('posts', 'id', ['text', 'image']);
+const postsDataService = new FileDBService('posts', 'id', ['text', 'image', 'createdAt']);
 const postsRouter = dataRouter(postsDataService);
 
 const app = express();

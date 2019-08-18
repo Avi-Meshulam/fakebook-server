@@ -89,8 +89,8 @@ async function update(collectionName, id, data) {
     const filtered = filterObj(data, mutableFields.get(collectionName));
     const newRec = { ...oldRec, ...filtered, [idFields.get(collectionName)]: id };
     collection.set(id, newRec);
-    return await trySave()
-      .then(() => true)
+    return await trySave(collectionName)
+      .then(() => newRec)
       .catch(err => {
         // rollback
         collection.set(id, oldRec);
@@ -104,7 +104,7 @@ async function remove(collectionName, id) {
   const rec = collection.get(id);
   if (rec) {
     collection.delete(id);
-    return await trySave()
+    return await trySave(collectionName)
       .then(() => true)
       .catch(err => {
         // rollback
