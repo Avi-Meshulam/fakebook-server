@@ -2,19 +2,19 @@
   {
     "id": 1,
     "text": "Microsoft will stop Typescript support in 2020",
-    "image": "posts_1.jpg",
+    "image": "post_1.jpg",
     "createdAt": "2019-08-12T17:52:10.727Z"
   },
   {
     "id": 2,
     "text": "By 2030, one of every 3 american will work as a software developer",
-    "image": "posts_2.jpg",
+    "image": "post_2.jpg",
     "createdAt": "2019-08-15T10:40:01.727Z"
   },
   {
     "id": 3,
     "text": "Mark Zuckerberg: I'm tired of leading facebook and looking for an heir",
-    "image": "posts_3.jpg",
+    "image": "post_3.jpg",
     "createdAt": "2019-08-17T16:52:20.727Z"
   }
 ]

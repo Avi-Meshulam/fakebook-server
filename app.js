@@ -1,16 +1,17 @@
+require('./polyfills');
+
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const express = require('express');
 const logger = require('morgan');
 const path = require('path');
-const FileDBService = require('./services/data.fileDB.service');
-const indexRouter = require('./routes/index');
-const dataRouter = require('./services/router.data.service');
-
-const postsDataService = new FileDBService('posts', 'id', ['text', 'image', 'createdAt']);
-const postsRouter = dataRouter(postsDataService);
+const imagesRouter = require('./routers/imagesRouter');
+const indexRouter = require('./routers/index');
+const postsRouter = require('./routers/postsRouter');
+const MongooseDataService = require('./data/services/data.db.service');
 
 const app = express();
+const postsDataService = new MongooseDataService('post');
 
 // middlewares
 app.use(logger('dev'));
@@ -20,17 +21,19 @@ app.use(cookieParser());
 app.use(cors());
 
 // routes
-app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
-app.use('/api/posts', postsRouter);
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/api/posts', postsRouter(postsDataService));
+app.use('/images', imagesRouter(postsDataService));
+// app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((req, res, next) => {
-  let err = new Error('Page Not Found');
+  let err = new Error('404 Not Found');
   err.status = 404;
   next(err);
 });
 
+// uncaught error handling
 app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.json({
